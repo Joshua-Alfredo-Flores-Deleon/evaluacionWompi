@@ -9,11 +9,11 @@
 
 import mongoose, { Schema, model } from "mongoose";
 
-const clientes = new Schema({
+const boletos = new Schema({
 
     customerId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "clientes"
+        ref: "boletos"
     },
     quantity:{type: Number},
     purchaseDate:{type: Date},
@@ -28,4 +28,4 @@ const clientes = new Schema({
     strict: false
 })
 
-export default model("clientes", clientes)
+export default model("boletos", boletos)
