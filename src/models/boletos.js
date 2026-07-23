@@ -13,7 +13,7 @@ const boletos = new Schema({
 
     customerId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "boletos"
+        ref: "clientes"
     },
     quantity:{type: Number},
     purchaseDate:{type: Date},

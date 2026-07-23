@@ -31,14 +31,13 @@ registerController.register = async (req, res) => {
                 password: passwordHashed,
                 name,
                 email,
-                password,
                 isVerified,
             },
             config.JWT.secret,
             {expiresIn:"15m"},
         );
 
-        res.cookie("registrationCookie", token, {maxAge: 15 * 60 * 100});
+        res.cookie("registrationCookie", token, {maxAge: 15 * 60 * 1000});
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -75,6 +74,9 @@ registerController.verifyCode = async ( req, res) => {
         const {verificationCodeRequest} = req.body;
 
         const token = req.cookies.registrationCookie;
+        if (!token) {
+            return res.status(400).json({message:"No active registration session or registration token has expired"})
+        }
 
         const decoded = jsonwebtoken.verify(token, config.JWT.secret);
 
@@ -103,6 +105,12 @@ registerController.verifyCode = async ( req, res) => {
         
     } catch (error) {
         console.log("error"+error)
+        if (error.name === "TokenExpiredError") {
+            return res.status(400).json({ message: "Verification code has expired" })
+        }
+        if (error.name === "JsonWebTokenError") {
+            return res.status(400).json({ message: "Invalid registration token" })
+        }
         return res.status(500).json({message:"Internal Server Error"})    
     }
 }

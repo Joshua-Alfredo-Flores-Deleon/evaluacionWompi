@@ -12,7 +12,7 @@ registerController.register = async (req, res) => {
     email,
     password,
     isVerified
-    } = req.body;
+    } = req.body;       
 
     try {
         
@@ -31,14 +31,13 @@ registerController.register = async (req, res) => {
                 password: passwordHashed,
                 name,
                 email,
-                password,
                 isVerified,
             },
             config.JWT.secret,
             {expiresIn:"15m"},
         );
 
-        res.cookie("registrationCookie", token, {maxAge: 15 * 60 * 100});
+        res.cookie("registrationCookie", token, {maxAge: 15 * 60 * 1000});
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
